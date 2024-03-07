@@ -1,11 +1,13 @@
 import pytest
 import requests
+from lib.my_requests import MyRequests
 from lib.base_case import BaseCase
 from lib.assertions import Assertions
 
+
 class TestUserGet(BaseCase):
     def test_get_user_details_not_auth(self):
-        response = requests.get("https://playground.learnqa.ru/api/user/2")
+        response = MyRequests.get("user/2")
 
         Assertions.assert_json_has_key(response, "username")
 
@@ -15,14 +17,14 @@ class TestUserGet(BaseCase):
             "password": "1234"
         }
 
-        response = requests.post("https://playground.learnqa.ru/api/user/login", data=data)
+        response = MyRequests.post('user/login', data=data)
 
         auth_sid = self.get_cookie(response, "auth_sid")
         token = self.get_header(response, 'x-csrf-token')
         user_id_from_auth_method = self.get_json_value(response, "user_id")
 
-        response2 = requests.get(
-            f"https://playground.learnqa.ru/api/user/{user_id_from_auth_method}",
+        response2 = MyRequests.get(
+            f"user/{user_id_from_auth_method}",
             headers={'x-csrf-token': token},
             cookies={'auth_sid': auth_sid}
         )
@@ -35,8 +37,7 @@ class TestUserGet(BaseCase):
             "email": "vinkotov@example.com",
             "password": "1234"
         }
-
-        response = requests.post("https://playground.learnqa.ru/api/user/login", data=data)
+        response = MyRequests.post("user/login", data=data)
 
         auth_sid = self.get_cookie(response, "auth_sid")
         token = self.get_header(response, 'x-csrf-token')
@@ -45,8 +46,8 @@ class TestUserGet(BaseCase):
 
         assert user_id_from_auth_method != another_user_id, f"Different user ids are the same but should not!"
 
-        response2 = requests.get(
-            f"https://playground.learnqa.ru/api/user/{another_user_id}",
+        response2 = MyRequests.get(
+            f"user/{another_user_id}",
             headers={'x-csrf-token': token},
             cookies={'auth_sid': auth_sid}
         )
