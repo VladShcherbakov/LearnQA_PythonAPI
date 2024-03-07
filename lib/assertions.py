@@ -50,3 +50,8 @@ class Assertions:
 
         for name in names:
             assert name not in response_dict, f"Response JSON have key '{name}' but should not"
+
+    @staticmethod
+    def assert_code_status(response: Response, code_status):
+        assert code_status == response.status_code, \
+            f"Wrong response code status '{response.status_code}', should be '{code_status}'"
