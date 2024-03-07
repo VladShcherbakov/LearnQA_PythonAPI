@@ -1,6 +1,7 @@
 import pytest
 import requests
 from lib.base_case import BaseCase
+from lib.my_requests import MyRequests
 
 
 class TestUserRegister(BaseCase):
@@ -26,7 +27,7 @@ class TestUserRegister(BaseCase):
         if email == "nousernamefield@example.com":
             del data["username"]
 
-        response = requests.post("https://playground.learnqa.ru/api/user/", data=data)
+        response = MyRequests.post("user", data=data)
 
         assert response.status_code == 400, f"Unexpected status code '{response.status_code}'"
         assert response.text == expected_error, f"Unexpected response content '{response.text}'"
