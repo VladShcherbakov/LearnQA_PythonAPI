@@ -2,8 +2,10 @@ import pytest
 import requests
 from lib.base_case import BaseCase
 from lib.my_requests import MyRequests
+import allure
 
-
+@allure.label("owner", "Vladimir Shcherbakov")
+@allure.tag("User Registration")
 class TestUserRegister(BaseCase):
     cases = [
         ("userwithoutatexample.com", "Invalid email format"),
@@ -14,6 +16,7 @@ class TestUserRegister(BaseCase):
          "longlonglonglonglonglonglonglonglongemail@example.com", "The value of 'email' field is too long"),
     ]
 
+    @allure.description("Test create a user with existing email")
     @pytest.mark.parametrize("email, expected_error", cases)
     def test_create_user_with_existing_email(self, email, expected_error):
         data = {

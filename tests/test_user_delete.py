@@ -3,9 +3,14 @@ import requests
 from lib.base_case import BaseCase
 from lib.assertions import Assertions
 from lib.my_requests import MyRequests
+import allure
 
 
+@allure.label("owner", "Vladimir Shcherbakov")
+@allure.tag("User Deletion")
 class TestUserDelete(BaseCase):
+
+    @allure.description("Trying to delete undeletable users with ids from 1 to 5")
     def test_delete_undeletable_user(self):
         data = {
             'email': 'vinkotov@example.com',
@@ -45,6 +50,7 @@ class TestUserDelete(BaseCase):
             "User with ID 1, 2, 3, 4 or 5 must be undeletable!"
         )
 
+    @allure.description("Positive tests for deleting the user")
     def test_delete_user_with_auth(self):
         register_data = self.prepare_registration_data()
         response1 = MyRequests.post("user/", data=register_data)
@@ -83,6 +89,7 @@ class TestUserDelete(BaseCase):
         assert response4.text == 'User not found', \
             f"Wrong response text '{response4.text}'. User '{user_id_from_auth_method}' should be deleted"
 
+    @allure.description("Trying to delete the user when authorized with another one")
     def test_delete_user_auth_another_user(self):
         user = self._prepare_user()
         user2 = self._prepare_user()

@@ -6,6 +6,8 @@ from lib.my_requests import MyRequests
 import allure
 
 
+@allure.label("owner", "Vladimir Shcherbakov")
+@allure.tag("User Authorization")
 @allure.epic("Authorization cases")
 class TestUserAuth(BaseCase):
     exclude_params = [

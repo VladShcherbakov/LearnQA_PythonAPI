@@ -3,14 +3,17 @@ import requests
 from lib.assertions import Assertions
 from lib.base_case import BaseCase
 from lib.my_requests import MyRequests
+import allure
 
-
+@allure.label("owner", "Vladimir Shcherbakov")
+@allure.tag("User Editing")
 class TestUserEdit(BaseCase):
     wrong_email_cases = [
         ("email_without_@"),
         ("one_char_email")
     ]
 
+    @allure.description("Test for editing just created user")
     def test_edit_just_created_user(self):
         user = self._prepare_user()
 
@@ -54,6 +57,7 @@ class TestUserEdit(BaseCase):
             "Wrong name of the user after edit"
         )
 
+    @allure.description("Trying to edit a user when not authorized")
     def test_edit_user_data_when_not_auth(self):
         user = self._prepare_user()
 
@@ -71,6 +75,7 @@ class TestUserEdit(BaseCase):
         expected_error_text = 'Auth token not supplied'
         assert response.text == 'Auth token not supplied', f"Response should have '{expected_error_text}' error"
 
+    @allure.description("Trying to edit data of the user when authorized with another user")
     def test_edit_user_data_auth_another_user(self):
         user = self._prepare_user()
         user2 = self._prepare_user()
@@ -119,6 +124,7 @@ class TestUserEdit(BaseCase):
             "Wrong name of the user after edit"
         )
 
+    @allure.description("Editing the user with wrong email")
     @pytest.mark.parametrize("case", wrong_email_cases)
     def test_edit_user_data_wrong_email(self, case):
         user = self._prepare_user()
